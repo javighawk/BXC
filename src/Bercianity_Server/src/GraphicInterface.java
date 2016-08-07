@@ -192,7 +192,7 @@ public class GraphicInterface extends JFrame{
         btnTestM1.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				MainAction.arduino.sendTestMotors(1);
+				MainAction.arduino.sendTestM(0);
 			}
         });
         panelSpeedTM.add(btnTestM1);
@@ -203,7 +203,7 @@ public class GraphicInterface extends JFrame{
         btnTestM2.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				MainAction.arduino.sendTestMotors(2);
+				MainAction.arduino.sendTestM(1);
 			}
         });
         panelSpeedTM.add(btnTestM2);

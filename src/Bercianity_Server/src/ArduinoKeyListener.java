@@ -10,42 +10,42 @@ public class ArduinoKeyListener implements KeyListener{
 		  		 
 	  		/* Left */
 	  		case KeyEvent.VK_A:
-	  			MainAction.arduino.moveBot(2);
+	  			MainAction.arduino.sendMovement(COMM.MOVE_MODE, COMM.DIR_LEFT);
 	  			break;
 	  			
 	  		/* Right */
 	  		case KeyEvent.VK_D:
-	  			MainAction.arduino.moveBot(3);
+	  			MainAction.arduino.sendMovement(COMM.MOVE_MODE, COMM.DIR_RIGHT);
 	  			break;
 	  			
 	  		/* Up */
 	  		case KeyEvent.VK_W: 
-	  			MainAction.arduino.moveBot(0);
+	  			MainAction.arduino.sendMovement(COMM.MOVE_MODE, COMM.DIR_UP);
 	  			break;
 	  			
 	  		/* Down */
 	  		case KeyEvent.VK_S:
-	  			MainAction.arduino.moveBot(1);
+	  			MainAction.arduino.sendMovement(COMM.MOVE_MODE, COMM.DIR_DOWN);
 	  			break;
 	  		
 	  		/* Up-left */
 	  		case KeyEvent.VK_Q:
-	  			MainAction.arduino.spinBot(0); 
+	  			MainAction.arduino.sendMovement(COMM.SPIN_MODE, COMM.SPIN_U_L);
 	  			break;
 	  		
 	  		/* Up-right */
 	  		case KeyEvent.VK_E:
-	  			MainAction.arduino.spinBot(1);
+	  			MainAction.arduino.sendMovement(COMM.SPIN_MODE, COMM.SPIN_U_R);
 	  			break;
 	  		
 	  		/* Down-left */
 	  		case KeyEvent.VK_Z:
-	  			MainAction.arduino.spinBot(2);
+	  			MainAction.arduino.sendMovement(COMM.SPIN_MODE, COMM.SPIN_D_L);
 	  			break;
 	  		
 	  		/* Down-right */
 	  		case KeyEvent.VK_C:
-	  			MainAction.arduino.spinBot(3);
+	  			MainAction.arduino.sendMovement(COMM.SPIN_MODE, COMM.SPIN_D_R);
 	  			break;
 	  			
 	  		/* Stop motors */
