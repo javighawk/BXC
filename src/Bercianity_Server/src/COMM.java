@@ -68,23 +68,23 @@ public class COMM{
      */
     public void initialize(){
     	
-    	/* Get port number */
+    	// Get port number
     	int portNumber = MainAction.GUI.getPort();
         
         try{
         	
-        	/* Initialize sockets */
+        	// Initialize sockets
         	serverSocket = new ServerSocket(portNumber);
             
-        	/* Wait for an incoming connection */
+        	// Wait for an incoming connection
             MainAction.GUI.println("[Server]: Created socket. Waiting for connection...");
             clientSocket = serverSocket.accept();
             
-            /* Connection received */
+            // Connection received
             MainAction.GUI.println("[Server]: Client connected!");
             MainAction.GUI.setClientIP(clientSocket.getInetAddress());
             
-            /* Initialize input and output streams */
+            // Initialize input and output streams
             output = new OutputStreamWriter(clientSocket.getOutputStream(), "ISO-8859-1");                   
             input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream(), "ISO-8859-1"));    
             
@@ -281,8 +281,8 @@ public class COMM{
     	short data = -1;
     	data = (short) input.read();			
     	
-    	/* If received byte is a flag, we have to discard it
-    	 * and take the following byte */
+    	//If received byte is a flag, we have to discard it
+    	// and take the following byte
     	if( data == ESC )
 			while( (data = (short) input.read()) < 0 );
     	
