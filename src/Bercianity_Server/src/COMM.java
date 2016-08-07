@@ -19,7 +19,7 @@ public class COMM{
 	public final static short TEXT_MODE 		= 0x04;
 	public final static short COMMAND_MODE 		= 0x08;
 		
-	/* Movement direction identifiers */
+	/* Movement/Spin mode identifiers */
 	public final static short DIRECTION_MASK	= 0x30;
 	public final static short DIR_UP 			= 0x00;
 	public final static short DIR_DOWN 			= 0x10;
@@ -101,62 +101,41 @@ public class COMM{
     
     
     /*
-     * Create the command to move the bot and push it to the output queue
+     * Create the command to move/spin the bot and push it to the output queue
      * 
-     * @param dir Direction of movement (0 = UP, 1 = DOWN, 2 = LEFT, 3 = RIGHT)
+     * @param mode MOVE_MODE or SPIN_MODE
+     * @param dir Movement/Spin mode (DIR_* or SPIN_*)
      */
-    public void moveBot(int dir){
+    public void sendMovement( int mode, int dir ){
+    	// Initial assert
+    	if( mode == MOVE_MODE ){
+	    	if( dir != DIR_UP && 
+	    		dir != DIR_DOWN &&
+	    		dir != DIR_LEFT && 
+	    		dir != DIR_RIGHT
+	    		)
+	    		return;
+    	} else if( mode == SPIN_MODE ){
+    		if( dir != SPIN_U_L && 
+    	    	dir != SPIN_U_R &&
+    	    	dir != SPIN_D_L && 
+    	    	dir != SPIN_D_R)
+    			return;
+    	} else return;
     	
-    	short sendData = 0;
-    	sendData = setMove(sendData);
-    	switch(dir){
-    		case 0: sendData = setDirection(DIR_UP, sendData); break;
-    		case 1: sendData = setDirection(DIR_DOWN, sendData); break;
-    		case 2: sendData = setDirection(DIR_LEFT, sendData); break;
-    		case 3: sendData = setDirection(DIR_RIGHT, sendData); break;
-    		default: return;
-    	}
-    	
+    	// Get speed
     	int newSpeed = MainAction.GUI.getSpeed();
-
+    	
+    	// Send data
+    	MainAction.OutputCOMMLock.lock();
     	if( newSpeed != lastSpeed ){
     		lastSpeed = newSpeed;
-    		sendData = setSpeedCommand(SPEED_NEWSPEED, sendData);
-    		MainAction.OutputCOMMLock.lock();
-    		MainAction.outputS.push( sendData );
+    		MainAction.outputS.push( mode | SPEED_NEWSPEED | dir );
     		MainAction.outputS.push( newSpeed );
-        	MainAction.OutputCOMMLock.unlock();
+    	} else {
+    		MainAction.outputS.push( mode | SPEED_NOCHANGE | dir );
     	}
-    }
-    
-    
-    /*
-     * Create the command to spin the bot and push it to the output queue
-     * 
-     * @param dir Direction of movement (0 = UP-LEFT, 1 = UP-RIGHT, 2 = DOWN-LEFT, 3 = DOWN-RIGHT)
-     */
-    public void spinBot(int dir){
-    	
-    	short sendData = 0;
-    	sendData = setSpin(sendData);
-    	switch(dir){
-			case 0: sendData = setDirection(SPIN_U_L, sendData); break;
-			case 1: sendData = setDirection(SPIN_U_R, sendData); break;
-			case 2: sendData = setDirection(SPIN_D_L, sendData); break;
-			case 3: sendData = setDirection(SPIN_D_R, sendData); break;
-			default: return;
-    	}
-    	
-    	int newSpeed = MainAction.GUI.getSpeed();
-    	    	
-   		if( newSpeed != lastSpeed ){
-   			lastSpeed = newSpeed;
-    		sendData = setSpeedCommand(SPEED_NEWSPEED, sendData);
-    		MainAction.OutputCOMMLock.lock();
-    		MainAction.outputS.push( sendData );
-    		MainAction.outputS.push( newSpeed );
-        	MainAction.OutputCOMMLock.unlock();
-    	}
+    	MainAction.OutputCOMMLock.unlock();
     }
     
     
@@ -164,69 +143,13 @@ public class COMM{
      * Stop all motors using the Move mode
      */
     public void stopMotors(){
-    	
-    	short sendData = 0;
-    	sendData = setMove(sendData);
-    	sendData = setSpeedCommand(SPEED_STOP, sendData);
-    	lastSpeed = 0;
-
+    	// Send data
     	MainAction.OutputCOMMLock.lock();
-    	MainAction.outputS.push( sendData );	    	
+    	MainAction.outputS.push( MOVE_MODE | DIR_UP | SPEED_STOP );	    	
     	MainAction.OutputCOMMLock.unlock();
-  	
-    }
-    
-    
-    /*
-     * Sets Mode bits into Movement mode.
-     * 
-     * @param data The unsigned byte to be set into Movement mode
-     */
-    private short setMove(short data){
-    	data = (short) (data & ~MODE_MASK);
-    	data = (short) (data | MOVE_MODE);
-    	return data;
-    }
-    
-    
-    /*
-     * Sets Mode bits into Spin mode.
-     * 
-     * @param data The unsigned byte to be set into Spin mode
-     */
-    private short setSpin(short data){
-    	data = (short) (data & ~MODE_MASK);
-    	data = (short) (data | SPIN_MODE);
-    	return data;
-    }
-   
-    
-    /*
-     * Sets direction (Only for Movement or Spin mode)
-     * 
-     * @param direction Direction to set
-     * @param data The unsigned byte to be set into the desired direction
-     */
-    private short setDirection(int direction, short data){
-    	direction = (direction & 48);
-    	data = (short) (data & ~DIRECTION_MASK);
-    	data = (short) (data | direction);
-    	return data;
-    }
-    
-    
-    /*
-     * Sets speed (only for Movement or Spin mode)
-     * 
-     * @param speed Speed to set
-     * @param data The unsigned byte to be set into the desired speed
-     */
-    private short setSpeedCommand(short speedCMD, short data){
-    	speedCMD = (short) (speedCMD & 3);
-		data = (short) (data & ~SPEED_MASK);
-		data = (short) (data | speedCMD);
-		return data;
-		
+    	
+    	// Update last speed
+    	lastSpeed = 0;  	
     }
     
     
