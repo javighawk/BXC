@@ -2,42 +2,42 @@ import java.io.*;
 import java.net.*;
 
 public class COMM{
-		
-	/* Movement direction identifiers */
-	public final static short DIR_UP = 0x00;
-	public final static short DIR_DOWN = 0x10;
-	public final static short DIR_LEFT = 0x20;
-	public final static short DIR_RIGHT = 0x30;
-	public final static short SPIN_U_L = 0x00;
-	public final static short SPIN_D_L = 0x10;
-	public final static short SPIN_U_R = 0x20;
-	public final static short SPIN_D_R = 0x30;
 	
-	/* Movement commands */
-	public final static short SPEED_CMD_NOCHANGE = 0x00;
-	public final static short SPEED_CMD_NEWSPEED = 0x01;
-	public final static short SPEED_CMD_STOP = 0x02;
-
-	/* Shortcut command identifiers */
-	public final static short SHRTCMD_TESTMOTORS = 0x12;
+	/* COMM packages */
+	public final static short EOT 				= 0x04;
+	public final static short ENDOFTM 			= 0x05;
+	public final static short TELEMETRY 		= 0x0E;
+	public final static short TM_PETITION		= 0x0F;
+	public final static short ESC 				= 0x7E;
+	public final static short TM_CONFIRMATION	= 0x80;
+	public final static short ENDOFPCK 			= 0x88;
 	
 	/* Mode identifiers */
-	public final static short MOVEMODE = 0x00;
-	public final static short SPINMODE = 0x0C;
-	public final static short TEXTMODE = 0x04;
-	public final static short COMMANDMODE = 0x08;
-	public final static short SHORTCUTCOMMAND = 0x20; 
-
-	/* Mode masks (0 all bits that are not Mode bits) */
-	public final static short SPEED_CMD_MASK = 0x03;
-	public final static short DIRECTION_MASK = 0x30;
-	public final static short MODE_MASK = 0x0C;
-	public final static short SHRTCMD_MASK = 0xD3;
+	public final static short MODE_MASK 		= 0x0C;
+	public final static short MOVE_MODE 		= 0x00;
+	public final static short SPIN_MODE 		= 0x0C;
+	public final static short TEXT_MODE 		= 0x04;
+	public final static short COMMAND_MODE 		= 0x08;
+		
+	/* Movement direction identifiers */
+	public final static short DIRECTION_MASK	= 0x30;
+	public final static short DIR_UP 			= 0x00;
+	public final static short DIR_DOWN 			= 0x10;
+	public final static short DIR_LEFT 			= 0x20;
+	public final static short DIR_RIGHT 		= 0x30;
+	public final static short SPIN_U_L 			= 0x00;
+	public final static short SPIN_D_L 			= 0x10;
+	public final static short SPIN_U_R 			= 0x20;
+	public final static short SPIN_D_R 			= 0x30;
 	
-	/* COMM identifiers */
-	public final static short TELEMETRY = 0x0E;
-	public final static short TM_PETITION = 0x0F;
-	public final static short ESC = 0x7E;
+	/* Movement speed identifiers */
+	public final static short SPEED_MASK 		= 0x03;
+	public final static short SPEED_NOCHANGE 	= 0x00;
+	public final static short SPEED_NEWSPEED 	= 0x01;
+	public final static short SPEED_STOP 		= 0x02;
+
+	/* Command identifiers */
+	public final static short CMD_TESTMOTORS 	= 0x12;
 	
 	/* Last speed of the bot */
 	private static int lastSpeed = 0;
@@ -50,6 +50,7 @@ public class COMM{
     private ServerSocket serverSocket;
     private Socket clientSocket;
     
+    
     /*
      * Constructor
      */
@@ -60,6 +61,7 @@ public class COMM{
 			e.printStackTrace();
 		}
     }
+    
     
     /*
      * Initialize COMM. Open socket and wait for a client connection
@@ -94,8 +96,9 @@ public class COMM{
     
 
     //**************************************************************//
-    //********************* Movement functions *********************//
+    //********************* MOVEMENT FUNCTIONS *********************//
     //**************************************************************//
+    
     
     /*
      * Create the command to move the bot and push it to the output queue
@@ -118,13 +121,14 @@ public class COMM{
 
     	if( newSpeed != lastSpeed ){
     		lastSpeed = newSpeed;
-    		sendData = setSpeedCommand(SPEED_CMD_NEWSPEED, sendData);
+    		sendData = setSpeedCommand(SPEED_NEWSPEED, sendData);
     		MainAction.OutputCOMMLock.lock();
     		MainAction.outputS.push( sendData );
     		MainAction.outputS.push( newSpeed );
         	MainAction.OutputCOMMLock.unlock();
     	}
     }
+    
     
     /*
      * Create the command to spin the bot and push it to the output queue
@@ -147,13 +151,14 @@ public class COMM{
     	    	
    		if( newSpeed != lastSpeed ){
    			lastSpeed = newSpeed;
-    		sendData = setSpeedCommand(SPEED_CMD_NEWSPEED, sendData);
+    		sendData = setSpeedCommand(SPEED_NEWSPEED, sendData);
     		MainAction.OutputCOMMLock.lock();
     		MainAction.outputS.push( sendData );
     		MainAction.outputS.push( newSpeed );
         	MainAction.OutputCOMMLock.unlock();
     	}
     }
+    
     
     /*
      * Stop all motors using the Move mode
@@ -162,7 +167,7 @@ public class COMM{
     	
     	short sendData = 0;
     	sendData = setMove(sendData);
-    	sendData = setSpeedCommand(SPEED_CMD_STOP, sendData);
+    	sendData = setSpeedCommand(SPEED_STOP, sendData);
     	lastSpeed = 0;
 
     	MainAction.OutputCOMMLock.lock();
@@ -171,6 +176,7 @@ public class COMM{
   	
     }
     
+    
     /*
      * Sets Mode bits into Movement mode.
      * 
@@ -178,9 +184,10 @@ public class COMM{
      */
     private short setMove(short data){
     	data = (short) (data & ~MODE_MASK);
-    	data = (short) (data | MOVEMODE);
+    	data = (short) (data | MOVE_MODE);
     	return data;
     }
+    
     
     /*
      * Sets Mode bits into Spin mode.
@@ -189,10 +196,11 @@ public class COMM{
      */
     private short setSpin(short data){
     	data = (short) (data & ~MODE_MASK);
-    	data = (short) (data | SPINMODE);
+    	data = (short) (data | SPIN_MODE);
     	return data;
     }
    
+    
     /*
      * Sets direction (Only for Movement or Spin mode)
      * 
@@ -206,6 +214,7 @@ public class COMM{
     	return data;
     }
     
+    
     /*
      * Sets speed (only for Movement or Spin mode)
      * 
@@ -214,29 +223,17 @@ public class COMM{
      */
     private short setSpeedCommand(short speedCMD, short data){
     	speedCMD = (short) (speedCMD & 3);
-		data = (short) (data & ~SPEED_CMD_MASK);
+		data = (short) (data & ~SPEED_MASK);
 		data = (short) (data | speedCMD);
 		return data;
 		
     }
     
     
-    
     //**************************************************************//
-    //********************* Command functions **********************//
+    //********************* COMMAND FUNCTIONS **********************//
     //**************************************************************//
     
-    /*
-     * Takes the shortcut command and returns the unsigned byte to be sent to the bot
-     * 
-     * @param CMD The command that wants to be sent
-     * @return The unsigned byte to be sent to the bot
-     */
-    public short getSHRTCMD(short CMD){
-    	
-    	CMD = (short) (CMD & SHRTCMD_MASK);
-    	return (short) (COMMANDMODE | SHORTCUTCOMMAND | CMD);  	
-    }
     
     /*
      * Sends the Test Motors shortcut command to the bot
@@ -244,22 +241,22 @@ public class COMM{
      * @param motor The motor to be tested
      */
     public void sendTestM(int motor){
-    	
+    	// Initial assert
     	if( motor<1 || motor>2 ) return;
     	
+    	// Send command
 		MainAction.OutputCOMMLock.lock();
-    	
-		MainAction.outputS.push(getSHRTCMD(SHRTCMD_TESTMOTORS));
-		MainAction.outputS.push(motor);
-    	
-    	MainAction.OutputCOMMLock.unlock();
-    	
+		MainAction.outputS.push( COMMAND_MODE );
+		MainAction.outputS.push( CMD_TESTMOTORS );
+		MainAction.outputS.push( motor );
+    	MainAction.OutputCOMMLock.unlock();	
     }
     
     
     //**************************************************************//
-    //********************** Other functions ***********************//
+    //*********************** COMM FUNCTIONS ***********************//
     //**************************************************************//
+    
     
     /*
      * Sends data to Arduino over TCP
@@ -271,7 +268,8 @@ public class COMM{
 		output.write(data);
 		output.flush();
 		MainAction.GUI.printOutputData(data);
-    } 
+    }
+    
     
     /*
      * Reads data from Arduino over TCP
@@ -292,6 +290,7 @@ public class COMM{
     	return data;
     }      
 
+    
     /*
      * Close streams
      */
