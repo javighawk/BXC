@@ -29,8 +29,8 @@ void CMD_TestMotors(){
 
 void CMD_StopMotors(){
            COMM_flush();
-           MMD_setMotorSpeed( 1, 0 );
-           MMD_setMotorSpeed( 2, 0 );
+           MVM_setMotorSpeed( 1, 0 );
+           MVM_setMotorSpeed( 2, 0 );
            TM_pendMotorSpeed();
 }
 

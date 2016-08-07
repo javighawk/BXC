@@ -158,7 +158,7 @@ int COMM_read(){
             tInfoRead.TIME_trigger();
             int cs = clientTCP.read();
             tInfoRead.TIME_stop();
-            TMO_feedTimeOut();
+            TMO_feed();
             return cs;
         }
     }

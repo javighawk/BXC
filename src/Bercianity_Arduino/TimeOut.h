@@ -20,7 +20,7 @@
 /**************** FUNCTIONS **************/
 /*****************************************/
 
-void TMO_feedTimeOut();
+void TMO_feed();
 int TMO_checkTimeOut();
 unsigned long TMO_getCurrentTimeOut();
 

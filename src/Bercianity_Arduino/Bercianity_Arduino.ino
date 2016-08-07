@@ -12,12 +12,6 @@
 #include <NXTI2CDevice.h>
 #include <NXTMMX.h>
 
-
-/*  
-  InfoByte doc:
-  [LINE_FEED][NONE][DIR_1 / SHCCM][DIR_0][MODE_1][MODE_0][SPEED_1][SPEED_0]
-*/
-
 /* Time record objects */
 TimeRecord tLoop("LOOP");
 TimeRecord tInfoRead("READ");
@@ -29,36 +23,43 @@ TimeRecord tTelemetry("TM");
 int infoByte;
 
 void setup(){
+    // Setup Serial (not needed for COMM with server)
     Serial.begin(SERIAL_BPS);
+
+    // Setup LEDs
     pinMode(GREENLEDPIN,OUTPUT);
     pinMode(REDLEDPIN,OUTPUT);
     pinMode(SERIALPIN,OUTPUT);
     digitalWrite(GREENLEDPIN, LOW);
     digitalWrite(REDLEDPIN, LOW);
     digitalWrite(SERIALPIN, LOW);
-    MMD_init();
+    
+    // Setup modules
+    MVM_init();
     CMD_init();
     COMM_init();
-    TMO_feedTimeOut();
+
+    // Update timeout
+    TMO_feed();
 }
 
 void loop(){
 
-    /* Start loop time recording */
+    // Start loop time recording
     tLoop.TIME_trigger();
 
-    /* Check Telemetry send */
+    // Check Telemetry send
     TM_checkTelemetry();
 
-    /* Check Time Out */
+    // Check Time Out
     if( TMO_checkTimeOut() );
 
-    /* Read incoming info */
+    // Read incoming info
     if( (infoByte = COMM_read()) != -1 ){
         identifyByte();
     }
 
-    /* Stop loop time recording */
+    // Stop loop time recording
     tLoop.TIME_stop();
 }
 
@@ -88,11 +89,11 @@ void identifyByte(){
                     break;
     
             case MOVEMODE_ID:
-                MMD_run(infoByte);
+                MVM_run(infoByte);
                 break;
 
             case SPINMODE_ID:
-                MMD_run(infoByte);
+                MVM_run(infoByte);
                 break;
         } 
     }

@@ -32,8 +32,8 @@ void TM_end(){
 void TM_motorsSpeedTelemetry(){
     
     /* Motors speed */
-    int mSpeed[2] = {MMD_getMotorSpeed(1),
-                     MMD_getMotorSpeed(2)};
+    int mSpeed[2] = {MVM_getMotorSpeed(1),
+                     MVM_getMotorSpeed(2)};
     uint8_t header[3] = {sizeof(mSpeed[0]), sizeof(mSpeed)/sizeof(mSpeed[0]), TEL_SPEED};
     
     // Send Motors speed

@@ -6,7 +6,7 @@ unsigned long currentTime;
 /*
  * Updates the timing variable
  */
-void TMO_feedTimeOut(){
+void TMO_feed(){
     currentTime = millis();
 }
 

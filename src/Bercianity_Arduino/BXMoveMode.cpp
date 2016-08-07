@@ -33,11 +33,11 @@ int mSpeed[2] = {0, 0};
 /* Motors speed offset */
 byte mOffset[2] = {0, 0};
 
-void MMD_init(){
+void MVM_init(){
     mmx.reset();
 }
 
-void MMD_run(int infoByte){
+void MVM_run(int infoByte){
   
     uint8_t speedInfo = infoByte & SPEED_MASK;
     uint8_t directionInfo = infoByte & DIRECTION_MASK;
@@ -50,34 +50,34 @@ void MMD_run(int infoByte){
     }
     else if( speedInfo == 0x02 ) totalSpeed = 0;
     
-    if( modeInfo == 0 ) MMD_moveBot(totalSpeed, directionInfo);
-    else if( modeInfo == 12 ) MMD_moveDiagonalBot(totalSpeed, directionInfo);
+    if( modeInfo == 0 ) MVM_moveBot(totalSpeed, directionInfo);
+    else if( modeInfo == 12 ) MVM_moveDiagonalBot(totalSpeed, directionInfo);
 }
 
 /*
  * Moves the bot forwards, backwards or spin around itself
  */
-void MMD_moveBot(byte speedT, byte direction){
+void MVM_moveBot(byte speedT, byte direction){
 
     switch(direction){
     case 0x00:
-        MMD_setMotorSpeed( 1, speedT );
-        MMD_setMotorSpeed( 2, speedT );
+        MVM_setMotorSpeed( 1, speedT );
+        MVM_setMotorSpeed( 2, speedT );
         break;
   
     case 0x10:
-        MMD_setMotorSpeed( 1, -speedT );
-        MMD_setMotorSpeed( 2, -speedT );
+        MVM_setMotorSpeed( 1, -speedT );
+        MVM_setMotorSpeed( 2, -speedT );
         break;
   
     case 0x20:
-        MMD_setMotorSpeed( 1, -speedT );
-        MMD_setMotorSpeed( 2, speedT );
+        MVM_setMotorSpeed( 1, -speedT );
+        MVM_setMotorSpeed( 2, speedT );
         break;
   
     case 0x30: 
-        MMD_setMotorSpeed( 1, speedT );
-        MMD_setMotorSpeed( 2, -speedT );
+        MVM_setMotorSpeed( 1, speedT );
+        MVM_setMotorSpeed( 2, -speedT );
         break;
     }
     
@@ -88,24 +88,24 @@ void MMD_moveBot(byte speedT, byte direction){
 /* 
  * Moves bot in a circle
  */
-void MMD_moveDiagonalBot(byte speedT, byte direction){
+void MVM_moveDiagonalBot(byte speedT, byte direction){
 
     switch(direction){
     case 0x00: 
-        MMD_setMotorSpeed( 2, (int) speedT/2 );
-        MMD_setMotorSpeed( 1, speedT );
+        MVM_setMotorSpeed( 2, (int) speedT/2 );
+        MVM_setMotorSpeed( 1, speedT );
         break;
     case 0x10: 
-        MMD_setMotorSpeed( 2, (int)-speedT/2 );
-        MMD_setMotorSpeed( 1, -speedT );
+        MVM_setMotorSpeed( 2, (int)-speedT/2 );
+        MVM_setMotorSpeed( 1, -speedT );
         break;
     case 0x20:
-        MMD_setMotorSpeed( 1, (int)speedT/2 );
-        MMD_setMotorSpeed( 2, speedT );
+        MVM_setMotorSpeed( 1, (int)speedT/2 );
+        MVM_setMotorSpeed( 2, speedT );
         break;
     case 0x30:
-        MMD_setMotorSpeed( 1, (int)-speedT/2 );
-        MMD_setMotorSpeed( 2, -speedT );
+        MVM_setMotorSpeed( 1, (int)-speedT/2 );
+        MVM_setMotorSpeed( 2, -speedT );
         break;
     }
     
@@ -113,7 +113,7 @@ void MMD_moveDiagonalBot(byte speedT, byte direction){
 }
 
 
-void MMD_setMotorSpeed( int motor, int speed ){
+void MVM_setMotorSpeed( int motor, int speed ){
 
     int dir = MMX_Direction_Forward;
   
@@ -140,6 +140,6 @@ void MMD_setMotorSpeed( int motor, int speed ){
 }
 
 
-int MMD_getMotorSpeed( int motor ){ return mSpeed[motor-1]; }
-void MMD_setMotorOffset( byte mot, byte sp ){ mOffset[mot-1] = sp; }
-byte MMD_getMotorOffset( int mot ){ return mOffset[mot-1]; }
+int MVM_getMotorSpeed( int motor ){ return mSpeed[motor-1]; }
+void MVM_setMotorOffset( byte mot, byte sp ){ mOffset[mot-1] = sp; }
+byte MVM_getMotorOffset( int mot ){ return mOffset[mot-1]; }
