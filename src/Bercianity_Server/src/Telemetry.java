@@ -34,6 +34,7 @@ public class Telemetry{
 	/* Semaphore to control the Files access */
 	private static Semaphore filesSemaphore = new Semaphore(1);
 	
+	
 	/*
 	 * Reads telemetry data and updates the UI
 	 */
@@ -103,6 +104,7 @@ public class Telemetry{
 			recordCurrentData();
 	}
 	
+	
 	/*
 	 * Creates external files to record telemetry data and initializes buffered Writers
 	 */
@@ -140,6 +142,7 @@ public class Telemetry{
 		}
 	}
 	
+	
 	/*
 	 * Records the current Telemetry data
 	 */
@@ -173,6 +176,7 @@ public class Telemetry{
 		}	
 	}
 	
+	
 	/*
 	 * Closes files and buffered writers
 	 */
@@ -197,6 +201,7 @@ public class Telemetry{
 			e.printStackTrace();
 		}
 	}
+
 	
 	/*
 	 * Check if telemetry is being recorded
@@ -207,4 +212,3 @@ public class Telemetry{
 		return isRecordingData;
 	}
 }
-
