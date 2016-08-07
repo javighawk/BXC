@@ -81,7 +81,7 @@ void loop(){
 
                 // Command mode
                 case COMMAND_MODE:
-                    CMD_run(data);
+                    CMD_run();
                     break
             }
         }
