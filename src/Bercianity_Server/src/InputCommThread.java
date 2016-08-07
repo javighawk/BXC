@@ -2,17 +2,14 @@ import java.io.IOException;
 
 public class InputCommThread extends Thread {
 	
-	/*
-	 * Flow-control flag
-	 */
+	/* Flag to determine thread flow */
 	private boolean progress = true;
 	
-	/*
-	 * Flag to accept telemetry
-	 */
+	/* Flag to accept telemetry */
 	private boolean acceptTM = false;
 	
-	/*
+	
+	/* 
 	 * @see java.lang.Thread#run()
 	 */
 	public void run(){
@@ -22,14 +19,12 @@ public class InputCommThread extends Thread {
 		try{
 			while(true){
 				if(progress){
-					
-					/* Read incoming data */
+					// Read incoming data
 					if((inputData = MainAction.arduino.readData()) >= 0){
-						
-						/* Update time out */
+						// Update time out
 						MainAction.timeOut.refreshTime();
-					
-						/* Telemetry petition */
+						
+						// Telemetry petition
 						if(inputData == Comm.TM_PETITION){						
 							MainAction.OutputCOMMLock.lock();
 							MainAction.outputS.push(0x80);
@@ -38,7 +33,7 @@ public class InputCommThread extends Thread {
 							continue;
 						}
 						
-						/* Telemetry data */
+						// Telemetry data
 						if(inputData == Comm.TELEMETRY){
 							if( acceptTM ){
 								Telemetry.readTelemetry();
@@ -51,7 +46,7 @@ public class InputCommThread extends Thread {
 							continue;
 						}
 						
-						/* Unidentified data */
+						// Unidentified data
 						else{
 							MainAction.GUI.println("[Server]: Input Data not identified: 0x" + Integer.toHexString(inputData));
 						}
@@ -63,10 +58,18 @@ public class InputCommThread extends Thread {
 		}
 	}
 	
+	
+	/*
+	 * Pause thread
+	 */
 	public void pause(){
 		progress = false;
 	}
 	
+	
+	/*
+	 * Resume thread
+	 */
 	public void threadContinue(){
 		progress = true;
 	}
