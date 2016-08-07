@@ -25,7 +25,7 @@ public class InputCommThread extends Thread {
 						MainAction.timeOut.refreshTime();
 						
 						// Telemetry petition
-						if(inputData == Comm.TM_PETITION){						
+						if(inputData == COMM.TM_PETITION){						
 							MainAction.OutputCOMMLock.lock();
 							MainAction.outputS.push(0x80);
 							MainAction.OutputCOMMLock.unlock();
@@ -34,7 +34,7 @@ public class InputCommThread extends Thread {
 						}
 						
 						// Telemetry data
-						if(inputData == Comm.TELEMETRY){
+						if(inputData == COMM.TELEMETRY){
 							if( acceptTM ){
 								Telemetry.readTelemetry();
 								acceptTM = false;

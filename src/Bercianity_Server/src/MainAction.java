@@ -14,7 +14,7 @@ public class MainAction{
 	public static GraphicInterface GUI;
 	
 	/* COMM */
-	public static Comm arduino;
+	public static COMM arduino;
 	
 	/* Locks */
 	public static final Lock InputCOMMLock = new ReentrantLock();
@@ -33,7 +33,7 @@ public class MainAction{
 		GUI.setInitial();
 		
 		// Initialize COMM */
-		arduino = new Comm();
+		arduino = new COMM();
 	}
 	
 	
