@@ -85,7 +85,7 @@ public class Telemetry{
 							while((inputTelemetry = MainAction.arduino.readData()) == -1);
 							mSpeed[i] = (short) ((mSpeed[i] << 8) + inputTelemetry);
 						}
-					MainAction.GUI.setSpeeds(mSpeed[0], mSpeed[1]);					
+					MainAction.GUI.setMSpeed(mSpeed);					
 					break;
 
 				// Unidentified Telemetry data
