@@ -19,9 +19,10 @@ TimeRecord tAvailable("AVAIL");
 TimeRecord tConnected("CNNCT");
 TimeRecord tTelemetry("TM");
 
-/* Variables declarations */
-int infoByte;
 
+/*
+ * Setup function
+ */
 void setup(){
     // Setup Serial (not needed for COMM with server)
     Serial.begin(SERIAL_BPS);
@@ -43,6 +44,10 @@ void setup(){
     TMO_feed();
 }
 
+
+/*
+ * Loop function
+ */
 void loop(){
 
     // Start loop time recording
@@ -54,47 +59,36 @@ void loop(){
     // Check Time Out
     if( TMO_checkTimeOut() );
 
-    // Read incoming info
-    if( (infoByte = COMM_read()) != -1 ){
-        identifyByte();
+    // Read incoming data if available
+    int data = COMM_read();
+
+    // Check if we received data
+    if( data > 0 ){
+        // Check for telemetry confirmation
+        if( data == TM_CONFIRMATION ){
+          tTelemetry.TIME_trigger();
+          TM_start();
+          tTelemetry.TIME_stop();
+        }
+
+        else{
+            switch(data & MODE_MASK){
+                // Move mode
+                case MOVEMODE_ID:
+                case SPINMODE_ID:
+                    MVM_run(data);
+                    break;
+
+                // Command mode
+                case COMMANDMODE_ID:
+                    CMD_run(data);
+                    break
+            }
+        }
+    }
+      
     }
 
     // Stop loop time recording
     tLoop.TIME_stop();
-}
-
-/*
- *  Identifies an incoming byte.
- */
-void identifyByte(){    
-
-    if( infoByte == TM_CONFIRMATION ){
-        tTelemetry.TIME_trigger();
-        TM_start();
-        tTelemetry.TIME_stop();
-    }
-
-    else{
-        switch(infoByte & MODE_MASK){
-    
-            case TEXTMODE_ID:
-                // TODO: Text mode
-                break;
-    
-            case COMMANDMODE_ID:
-                if( bitRead(infoByte,COMMAND_SHORTCUT_BIT) ) 
-                    CMD_shortCutCommands(infoByte);
-                else            
-                    // TODO: Written commands
-                    break;
-    
-            case MOVEMODE_ID:
-                MVM_run(infoByte);
-                break;
-
-            case SPINMODE_ID:
-                MVM_run(infoByte);
-                break;
-        } 
-    }
 }
