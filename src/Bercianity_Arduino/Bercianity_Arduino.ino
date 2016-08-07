@@ -19,6 +19,12 @@ TimeRecord tAvailable("AVAIL");
 TimeRecord tConnected("CNNCT");
 TimeRecord tTelemetry("TM");
 
+/* Array with pointers to all TimeRecord objects we have */
+TimeRecord *allTimeRecord[3] = {&tLoop, &tInfoRead, &tAvailable, &tConnected, &tTelemetry};
+
+/* Number of TimeRecord objects we have */
+int nAllTimeRecord = sizeof(allTimeRecord)/sizeof(allTimeRecord[0]);
+
 
 /*
  * Setup function
@@ -91,4 +97,24 @@ void loop(){
 
     // Stop loop time recording
     tLoop.TIME_stop();
+}
+
+
+/*
+ * Getter
+ * 
+ * @returns Number of TimeRecord objects in the program
+ */
+int MAIN_getNAllTimeRecord(){
+    return nAllTimeRecord;
+}
+
+
+/*
+ * Getter
+ * 
+ * @returns Array of TimeRecord pointers
+ */
+TimeRecord **MAIN_getAllTimeRecord(){
+    return allTimeRecord;
 }
