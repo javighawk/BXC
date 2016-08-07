@@ -74,13 +74,13 @@ void loop(){
         else{
             switch(data & MODE_MASK){
                 // Move mode
-                case MOVEMODE_ID:
-                case SPINMODE_ID:
+                case MOVE_MODE:
+                case SPIN_MODE:
                     MVM_run(data);
                     break;
 
                 // Command mode
-                case COMMANDMODE_ID:
+                case COMMAND_MODE:
                     CMD_run(data);
                     break
             }

@@ -10,39 +10,59 @@
 
 
 /*********************************************************/
-/*************** COMM PACKAGE DEFINES ********************/
+/****************** COMM PACKAGE DEFINES *****************/
 /*********************************************************/
 
-#define ESC                  0x7E
-#define TM_CONFIRMATION      0x80
+#define ENDOFTM                   0x05
+#define TELEMETRY                 0x0E
+#define TM_PETITION               0x0F
+#define ENDOFPCK                  0x88
+#define ESC                       0x7E
+#define TM_CONFIRMATION           0x80
+
+
+/*****************************************************/
+/****************** MODES DEFINES ********************/
+/*****************************************************/
+
+#define MOVE_MODE                 0x00
+#define SPIN_MODE                 0x0C
+#define COMMAND_MODE              0x08
+
+#define MODE_MASK                 0x0C
+#define SPEED_MASK                0x03
+#define DIRECTION_MASK            0x30
 
 
 /*********************************************************/
-/****************** INFO BYTE DEFINES ********************/
+/********************* PIN DEFINES ***********************/
 /*********************************************************/
 
-#define MODE_MASK            0x0C
-#define SPEED_MASK           0x03
-#define DIRECTION_MASK       0x30
-#define MOVEMODE_ID          0x00
-#define SPINMODE_ID          0x0C
-#define TEXTMODE_ID          0x04
-#define COMMANDMODE_ID       0x08
+#define MOTOR1_PIN                3
+#define MOTOR2_PIN                4
+#define MOTOR3_PIN                5
+#define MOTOR4_PIN                6
+#define SETUPLED_PIN              10
+#define COMMLED_PIN               11
+#define CONNECTIONLED_PIN         12
+#define IMU_INTERRUPTPIN          17
 
 
 /*********************************************************/
-/********************* LEDs DEFINES **********************/
+/********************* LED DEFINES ***********************/
 /*********************************************************/
 
-#define SERIALPIN                7
-#define REDLEDPIN                13
-#define GREENLEDPIN              2
+#define REDLED_PIN                SETUPLED_PIN
+#define GREENLED_PIN              COMMLED_PIN
+#define BLUELED_PIN               CONNECTIONLED_PIN
 
 
 /*********************************************************/
 /******************** OTHER DEFINES **********************/
-/*********************************************************/    
+/*********************************************************/
 
-#define SERIAL_BPS          115200  
+#define SERIAL_BPS                115200
+#define ON                        1
+#define OFF                       0
 
 #endif
