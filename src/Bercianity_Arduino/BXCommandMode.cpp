@@ -1,36 +1,35 @@
 #include "BXCommandMode.h"
 
-/* Functions declarations */
-void CMD_PIDValues(); 
-void CMD_TestMotors();
-void CMD_SwitchPID(); 
-void CMD_SetLPFAlpha(); 
-void CMD_SetOffsets(); 
-void CMD_StartAccelOffsets(); 
-void CMD_StartGyroOffsets(); 
-void CMD_MotorsSwitch(); 
-void CMD_SetMotorOffset(); 
-void CMD_StopMotors();
 
-void CMD_init(){    
+/*
+ * Test motors
+ */
+void CMD_TestMotors(){
+    // Get motor
+    int m = COMM_read_wTimeOut();
+
+    // Move motor for half a second in one direction
+    MVM_setMotorSpeed(m, MAX_SPEED);
+    delay(500);
+
+    // Move motor for half a second in the other direction
+    MVM_setMotorSpeed(m, -MAX_SPEED);
+    delay(500);
+
+    // Stop motor
+    MVM_setMotorSpeed(m, 0);
 }
-                          
-void CMD_shortCutCommands(uint8_t infoByte){
-  
-    switch(infoByte & COMMAND_SHORTCUT_MASK){
-       case SHRTCMD_TESTMOTORS: CMD_TestMotors(); break;
-       case SHRTCMD_STOPMOTORS: CMD_StopMotors(); break;
+
+
+/*
+ * Run command mode. Execeute incoming command
+ */
+void CMD_run(){
+    // Read command
+    int command = COMM_read_wTimeOut();
+
+    // Run
+    switch(command){
+       case CMD_TESTMOTORS: CMD_TestMotors(); break;
     }
 }
-
-void CMD_TestMotors(){
-           
-}
-
-void CMD_StopMotors(){
-           COMM_flush();
-           MVM_setMotorSpeed( 1, 0 );
-           MVM_setMotorSpeed( 2, 0 );
-           TM_pendMotorSpeed();
-}
-
