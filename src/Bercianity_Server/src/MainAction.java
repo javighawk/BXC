@@ -102,6 +102,7 @@ public class MainAction{
 		
 		// Pause threads */
 		inputS.pause();
+		outputS.pause();
 		timeOut.pause();
 		
 		// Close COMM */
