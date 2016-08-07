@@ -1,2 +1,11 @@
 # Private data
 pics/
+
+# Binaries
+src/Bercianity_Server/bin/
+
+# Logs
+*.log
+
+# Text files
+*.txt
