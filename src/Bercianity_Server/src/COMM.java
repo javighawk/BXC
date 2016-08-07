@@ -165,7 +165,7 @@ public class COMM{
      */
     public void sendTestM(int motor){
     	// Initial assert
-    	if( motor<1 || motor>2 ) return;
+    	if( motor != 0 && motor != 1 ) return;
     	
     	// Send command
 		MainAction.OutputCOMMLock.lock();
