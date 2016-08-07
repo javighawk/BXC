@@ -1,20 +1,14 @@
-
 public class TimeOutThread extends Thread {
 	
-	/*
-	 * Keeps the last time anything was received
-	 */
+	/* Keeps the last time anything was received */
 	private long time;
 	
-	/*
-	 * Time out in milliseconds
-	 */
+	/* Time out in milliseconds */
 	private int timeOut = 3500;
 	
-	/*
-	 * Flow-control flag
-	 */
+	/* Flow-control flag */
 	private boolean progress;
+	
 	
 	/*
 	 * @see java.lang.Thread#run()
@@ -30,12 +24,14 @@ public class TimeOutThread extends Thread {
 		}
 	}
 	
+	
 	/*
 	 * Pause the thread
 	 */
 	public void pause(){
 		progress = false;
 	}
+	
 	
 	/*
 	 * Restarts the time out counter
@@ -45,11 +41,11 @@ public class TimeOutThread extends Thread {
 		progress = true;
 	}
 	
+	
 	/*
 	 * Updates the time variable
 	 */
 	public void refreshTime(){
 		time = System.currentTimeMillis();
 	}
-
 }
