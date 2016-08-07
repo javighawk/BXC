@@ -1,7 +1,7 @@
 import java.io.*;
 import java.net.*;
 
-public class Comm{
+public class COMM{
 		
 	/* Movement direction identifiers */
 	public final static short DIR_UP = 0x00;
@@ -53,7 +53,7 @@ public class Comm{
     /*
      * Constructor
      */
-    public Comm(){
+    public COMM(){
     	try {
 			MainAction.GUI.setServerIP(InetAddress.getLocalHost());
 		} catch (UnknownHostException e) {
