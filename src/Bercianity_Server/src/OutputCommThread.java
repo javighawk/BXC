@@ -5,20 +5,15 @@ import java.util.concurrent.BlockingQueue;
 
 public class OutputCommThread extends Thread {
 
-	/*
-	 * Flow-control flag
-	 */
+	/* Flow-control flag */
 	private boolean progress = true;
 	
-	/*
-	 * Size of the output queue
-	 */
+	/* Size of the output queue */
 	private int QUEUE_SIZE = 100;
 	
-	/*
-	 * Output queue
-	 */
+	/* Output queue */
 	private BlockingQueue<Integer> queue = new ArrayBlockingQueue<Integer>(QUEUE_SIZE);
+	
 	
 	/*
 	 * @see java.lang.Thread#run()
@@ -27,7 +22,6 @@ public class OutputCommThread extends Thread {
 		try{
 			while(true){
 				if(progress){
-					
 					// Try to take the first element on queue and send it
 					try {
 						int d = queue.take();
@@ -42,6 +36,7 @@ public class OutputCommThread extends Thread {
 		}
 	}
 	
+	
 	/*
 	 * Pause the thread
 	 */
@@ -49,12 +44,14 @@ public class OutputCommThread extends Thread {
 		progress = false;
 	}
 	
+	
 	/*
 	 * Resume thread
 	 */
 	public void threadContinue(){
 		progress = true;
-	}	
+	}
+	
 	
 	/*
 	 * Push new data into the output queue
@@ -62,13 +59,10 @@ public class OutputCommThread extends Thread {
 	 * @param d The data to be pushed into the queue
 	 */
 	public void push(int d){
-		
 		try {
-
-			/* Push new data into the queue if the thread is still alive */
+			// Push new data into the queue if the thread is still alive
 			if( getState() != Thread.State.TERMINATED )
 				queue.put(d);
-			
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
