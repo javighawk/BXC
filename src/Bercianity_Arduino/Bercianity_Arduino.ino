@@ -72,9 +72,7 @@ void loop(){
     if( data > 0 ){
         // Check for telemetry confirmation
         if( data == TM_CONFIRMATION ){
-          tTelemetry.TIME_trigger();
           TM_start();
-          tTelemetry.TIME_stop();
         }
 
         else{
