@@ -61,8 +61,7 @@ public class GraphicInterface extends JFrame{
     private JLabel elblServerIP;
     private JProgressBar barM1Speed;
     private JProgressBar barM2Speed;
-    private JButton btnTestM1;
-    private JButton btnTestM2;
+    private JButton btnTestM;
 
     
     /*
@@ -186,32 +185,16 @@ public class GraphicInterface extends JFrame{
         barM2Speed.setBounds(97, 41, 116, 14);
         panelSpeedTM.add(barM2Speed);
         
-        btnTestM1 = new JButton("M1");
-        btnTestM1.setForeground(Color.BLACK);
-        btnTestM1.setBounds(97, 66, 59, 23);
-        btnTestM1.addActionListener(new ActionListener(){
+        btnTestM = new JButton("Test Motors");
+        btnTestM.setForeground(Color.BLACK);
+        btnTestM.setBounds(10, 65, 116, 23);
+        btnTestM.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				MainAction.arduino.sendTestM(0);
+				MainAction.arduino.sendTestM();
 			}
         });
-        panelSpeedTM.add(btnTestM1);
-        
-        btnTestM2 = new JButton("M2");
-        btnTestM2.setForeground(Color.BLACK);
-        btnTestM2.setBounds(166, 66, 59, 23);
-        btnTestM2.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				MainAction.arduino.sendTestM(1);
-			}
-        });
-        panelSpeedTM.add(btnTestM2);
-        
-        JLabel lblTest = new JLabel("Test:");
-        lblTest.setFont(new Font("Courier New", Font.PLAIN, 14));
-        lblTest.setBounds(10, 70, 77, 14);
-        panelSpeedTM.add(lblTest);
+        panelSpeedTM.add(btnTestM);
         
         JPanel panelTimeData = new JPanel();
         panelTimeData.setLayout(null);
@@ -551,8 +534,7 @@ public class GraphicInterface extends JFrame{
     	
     	// Motors panel
     	setMSpeed(new short[2]);
-    	btnTestM1.setEnabled(false);
-    	btnTestM2.setEnabled(false);
+    	btnTestM.setEnabled(false);
     	
     	// Speed panel
     	sliderSpeed.setEnabled(false);
@@ -576,8 +558,7 @@ public class GraphicInterface extends JFrame{
     	btnConnect.setEnabled(false);
     	
     	// Motors panel
-    	btnTestM1.setEnabled(true);
-    	btnTestM2.setEnabled(true);
+    	btnTestM.setEnabled(true);
     	
     	// Speed panel
     	sliderSpeed.setEnabled(true);

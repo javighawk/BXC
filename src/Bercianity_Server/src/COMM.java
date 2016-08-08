@@ -160,18 +160,12 @@ public class COMM{
     
     /*
      * Sends the Test Motors shortcut command to the bot
-     * 
-     * @param motor The motor to be tested
      */
-    public void sendTestM(int motor){
-    	// Initial assert
-    	if( motor != 0 && motor != 1 ) return;
-    	
+    public void sendTestM(){
     	// Send command
 		MainAction.OutputCOMMLock.lock();
 		MainAction.outputS.push( COMMAND_MODE );
 		MainAction.outputS.push( CMD_TESTMOTORS );
-		MainAction.outputS.push( motor );
     	MainAction.OutputCOMMLock.unlock();	
     }
     
