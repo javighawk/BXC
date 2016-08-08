@@ -18,32 +18,36 @@ uint8_t buf[BUFFER_SIZE];
 /* Transmission buffer index */
 int buf_index = 0;
 
+/* External declarations */
 extern TimeRecord tInfoRead;
 extern TimeRecord tAvailable;
 extern TimeRecord tConnected;
 
 
+/*
+ * Initializing function
+ */
 void COMM_init(){
 
-    /* Initialize WiFi board */
+    // Initialize WiFi board
     if ( !cc3000.begin() ){
         
-        /* An error occured */
+        // An error occured
         while( 1 ){
-            digitalWrite(REDLED_PIN, HIGH);
+            digitalWrite(SETUPLED_PIN, HIGH);
             delay(1000);
-            digitalWrite(REDLED_PIN, LOW);
+            digitalWrite(SETUPLED_PIN, LOW);
             delay(1000);
         }
     }
 
-    /* Turn on LED indicator */
+    // Turn on LED indicator
     digitalWrite(SETUPLED_PIN, HIGH);
 
-    /* Connect to WiFi network */
-    if ( !cc3000.connectToAP(WLAN_SSID, WLAN_PASS, WLAN_SECURITY )) {
+    // Connect to WiFi network
+    if ( !cc3000.connectToAP(WLAN_SSID, WLAN_PASS, WLAN_SECURITY) ){
         
-        /* Could not connect to the WiFi network */
+        // Could not connect to the WiFi network
         while( 1 ){
             digitalWrite(WIFICONNLED_PIN, HIGH);
             delay(1000);
@@ -52,40 +56,43 @@ void COMM_init(){
         }
     }
 
-    /* Connection successful. Turn on LED indicator */
+    // Connection successful. Turn on LED indicator
     digitalWrite(WIFICONNLED_PIN, HIGH);
 
-    /* Request DHCP */
+    // Request DHCP
     while ( !cc3000.checkDHCP() ){
         delay(100);
     } 
 
-    /* Print through Serial the server IP address */
+    // Print through Serial the server IP address
     cc3000.printIPdotsRev(serverIP);
     Serial.println();
 
-    /* Connect to server */
+    // Connect to server
     while( 1 ){
         clientTCP = cc3000.connectTCP(serverIP, serverPort_TCP);
 
-        /* Check connection */
+        // Check connection
         if( clientTCP.connected() ){
             Serial.println("Connected!");
             break;
         } else {
-            /* Blink twice */
+            // Blink twice
             digitalWrite(CONNECTIONLED_PIN, HIGH); delay(100);
             digitalWrite(CONNECTIONLED_PIN, LOW); delay(100);
             digitalWrite(CONNECTIONLED_PIN, HIGH); delay(100);
             digitalWrite(CONNECTIONLED_PIN, LOW); delay(100);
+
+            // Close socket before retrying
             COMM_closeSocket();
             Serial.println("Connection to server failed");
         }
     }  
 
-    /* Turn on LED indicator */
+    // Turn on LED indicator
     digitalWrite(CONNECTIONLED_PIN, HIGH);
 }
+
 
 /*
  * Writes a character to the output buffer
@@ -93,6 +100,7 @@ void COMM_init(){
 void COMM_write(uint8_t c, bool byteStuffing){
     COMM_write(&c, 1, byteStuffing);
 }
+
 
 /*
  * Writes an array of characters to the output buffer
@@ -102,11 +110,11 @@ void COMM_write(uint8_t *c, int len, bool byteStuffing){
     for( int i=len-1 ; i>=0 ; i-- ){
         byte sending = *(c + i);
 
-        /* Send the whole buffer if full */
+        // Send the whole buffer if full
         if( buf_index >= BUFFER_SIZE )
             COMM_flush();
 
-        /* Perform byte stuffing */
+        // Perform byte stuffing
         if( sending == ESC && byteStuffing ){
             buf[buf_index++] = ESC;
         }
@@ -114,6 +122,7 @@ void COMM_write(uint8_t *c, int len, bool byteStuffing){
         buf[buf_index++] = sending;
     }
 }
+
 
 /*
  * Cleans output buffer
@@ -123,6 +132,7 @@ void COMM_cleanBuffer(){
     buf_index = 0;
 }
 
+
 /*
  * Flushes out output buffer
  */
@@ -130,6 +140,7 @@ void COMM_flush(){
     clientTCP.write(buf, buf_index);
     COMM_cleanBuffer();
 }
+
 
 /*
  * Read a character from input buffer. Checks if the connection 
@@ -143,6 +154,7 @@ int COMM_read_wTimeOut(){
 
     return c;
 }
+
 
 /*
  * Reads a character from input buffer if available
@@ -165,6 +177,7 @@ int COMM_read(){
     return -1;
 }
 
+
 /*
  * Disconnects WiFi board
  */
@@ -172,10 +185,10 @@ void COMM_disconnect(){
     cc3000.disconnect();
 }
 
+
 /*
  * Closes TCP socket
  */
 void COMM_closeSocket(){
     clientTCP.close();
 }
-
