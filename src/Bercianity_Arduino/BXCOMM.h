@@ -38,5 +38,4 @@ int COMM_read_wTimeOut();
 void COMM_disconnect();
 void COMM_closeSocket();
 
-
 #endif
