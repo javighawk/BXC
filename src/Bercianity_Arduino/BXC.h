@@ -35,18 +35,18 @@
 /********************* PIN DEFINES ***********************/
 /*********************************************************/
 
-#define SETUPLED_PIN              10
-#define WIFICONNLED_PIN           11
-#define CONNECTIONLED_PIN         12
+#define REDLED_PIN                13
+#define GREENLED_PIN              7
+#define BLUELED_PIN               2
 
 
 /*********************************************************/
 /********************* LED DEFINES ***********************/
 /*********************************************************/
 
-#define REDLED_PIN                SETUPLED_PIN
-#define GREENLED_PIN              WIFICONNLED_PIN
-#define BLUELED_PIN               CONNECTIONLED_PIN
+#define SETUPLED_PIN              REDLED_PIN
+#define WIFICONNLED_PIN           GREENLED_PIN
+#define CONNECTIONLED_PIN         BLUELED_PIN
 
 
 /*********************************************************/
