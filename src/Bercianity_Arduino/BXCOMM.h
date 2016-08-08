@@ -39,5 +39,4 @@ void COMM_disconnect();
 void COMM_closeSocket();
 
 
-
 #endif

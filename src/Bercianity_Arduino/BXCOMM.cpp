@@ -11,7 +11,7 @@ Adafruit_CC3000 cc3000 = Adafruit_CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ
 Adafruit_CC3000_Client clientTCP;
 
 /* Server IP address */
-uint32_t serverIP = cc3000.IP2U32(192, 168, 0, 230);
+uint32_t serverIP = cc3000.IP2U32(172, 16, 0, 105);
 
 /* Server ports */
 int serverPort_TCP = 4444;
