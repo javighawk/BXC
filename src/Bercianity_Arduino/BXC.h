@@ -36,7 +36,7 @@
 /*********************************************************/
 
 #define SETUPLED_PIN              10
-#define WIFICONN_PIN              11
+#define WIFICONNLED_PIN           11
 #define CONNECTIONLED_PIN         12
 
 
