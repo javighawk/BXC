@@ -26,10 +26,10 @@ extern TimeRecord tConnected;
 void COMM_init(){
 
     /* Initialize WiFi board */
-    if (!cc3000.begin()){
+    if ( !cc3000.begin() ){
         
         /* An error occured */
-        while(1){
+        while( 1 ){
             digitalWrite(REDLEDPIN, HIGH);
             delay(1000);
             digitalWrite(REDLEDPIN, LOW);
@@ -41,10 +41,10 @@ void COMM_init(){
     digitalWrite(REDLEDPIN, HIGH);
 
     /* Connect to WiFi network */
-    if (!cc3000.connectToAP(WLAN_SSID, WLAN_PASS, WLAN_SECURITY)) {
+    if ( !cc3000.connectToAP(WLAN_SSID, WLAN_PASS, WLAN_SECURITY )) {
         
         /* Could not connect to the WiFi network */
-        while(1){
+        while( 1 ){
             digitalWrite(SERIALPIN, HIGH);
             delay(1000);
             digitalWrite(SERIALPIN, LOW);
@@ -56,7 +56,7 @@ void COMM_init(){
     digitalWrite(SERIALPIN, HIGH);
 
     /* Request DHCP */
-    while (!cc3000.checkDHCP()){
+    while ( !cc3000.checkDHCP() ){
         delay(100);
     } 
 
@@ -65,11 +65,11 @@ void COMM_init(){
     Serial.println();
 
     /* Connect to server */
-    while(1){
+    while( 1 ){
         clientTCP = cc3000.connectTCP(serverIP, serverPort_TCP);
 
         /* Check connection */
-        if (clientTCP.connected()){
+        if( clientTCP.connected() ){
             Serial.println("Connected!");
             break;
         } else {
@@ -150,7 +150,7 @@ int COMM_read_wTimeOut(){
  */
 int COMM_read(){
     tConnected.TIME_trigger();
-    if (clientTCP.connected()){
+    if( clientTCP.connected() ){
         tConnected.TIME_stop();
         tAvailable.TIME_trigger();
         if( clientTCP.available() ){
