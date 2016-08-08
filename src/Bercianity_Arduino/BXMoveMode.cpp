@@ -1,145 +1,172 @@
-/*******************************************
- *  _ _                      _ _ 
- * | 4 |                    | 1 |
- * |_ _|                    |_ _|                          
- *     \\                  //
- *      \\                //
- *       \\              //
- *        \\            //
- *         \\__________//
- *         |  BX_Drone  |
- *         | __________ |
- *         //          \\
- *        //            \\
- *       //              \\
- *      //                \\
- *  _ _//                  \\_ _ 
- * | 3 |                    | 2 |
- * |_ _|                    |_ _|
- * 
- *******************************************/
-
 #include "BXMoveMode.h"
 
 /* NTXMMX object */
 NXTMMX mmx;
 
-/* Total current speed */
-int totalSpeed = 0;
+/* Motors identifiers */
+int mID[2] = {MMX_Motor_1, MMX_Motor_2};
 
 /* Motors speed */
 int mSpeed[2] = {0, 0};
 
-/* Motors speed offset */
-byte mOffset[2] = {0, 0};
 
+/*
+ * Initializing function
+ */
 void MVM_init(){
     mmx.reset();
 }
 
-void MVM_run(int infoByte){
-  
-    uint8_t speedInfo = infoByte & SPEED_MASK;
-    uint8_t directionInfo = infoByte & DIRECTION_MASK;
-    uint8_t modeInfo = infoByte & MODE_MASK;
-    int totalSpeed;
-
-    if( speedInfo == 0x01 ){ 
-        if( (totalSpeed = COMM_read_wTimeOut()) == -1 ) return;
-        Serial.println(totalSpeed);
-    }
-    else if( speedInfo == 0x02 ) totalSpeed = 0;
-    
-    if( modeInfo == 0 ) MVM_moveBot(totalSpeed, directionInfo);
-    else if( modeInfo == 12 ) MVM_moveDiagonalBot(totalSpeed, directionInfo);
-}
 
 /*
- * Moves the bot forwards, backwards or spin around itself
+ * Set a motor to a certain speed
+ * 
+ * @param m The motor index (MOTOR_L or MOTOR_R)
+ * @param sp The speed the motor is set to (0-100)
  */
-void MVM_moveBot(byte speedT, byte direction){
+void MVM_setMotorSpeed(int m, int sp){
+    // Initial assert
+    if( m != MOTOR_L && m != MOTOR_R ) return;
 
-    switch(direction){
-    case 0x00:
-        MVM_setMotorSpeed( 1, speedT );
-        MVM_setMotorSpeed( 2, speedT );
-        break;
-  
-    case 0x10:
-        MVM_setMotorSpeed( 1, -speedT );
-        MVM_setMotorSpeed( 2, -speedT );
-        break;
-  
-    case 0x20:
-        MVM_setMotorSpeed( 1, -speedT );
-        MVM_setMotorSpeed( 2, speedT );
-        break;
-  
-    case 0x30: 
-        MVM_setMotorSpeed( 1, speedT );
-        MVM_setMotorSpeed( 2, -speedT );
-        break;
-    }
-    
+    // Get motor direction
+    int dir = (speed >= 0) * MMX_Direction_Forward + 
+              (speed < 0) * MMX_Direction_Reverse;
+
+    // Keep speed within boundaries and store it
+    mSpeed[m] = max(0, min(MAX_SPEED, abs(sp)));
+
+    // Apply speed
+    mmx.runUnlimited(mID[m], dir, sp); 
+}
+
+
+/*
+ * Move bot forward, backwards, rotate left or right
+ * 
+ * @param sp The speed the motors will move at
+ * @param dir The direction the bot is to move to
+ */
+void MVM_moveBot(int sp, uint8_t dir){
+    // Move motors
+    switch( dir ){
+        case MOVE_UP:
+            MVM_setMotorSpeed( MOTOR_L, sp );
+            MVM_setMotorSpeed( MOTOR_R, sp );
+            break;
+        case MOVE_DOWN:
+            MVM_setMotorSpeed( MOTOR_L, -sp );
+            MVM_setMotorSpeed( MOTOR_R, -sp );
+            break;
+        case MOVE_LEFT:
+            MVM_setMotorSpeed( MOTOR_L, -sp );
+            MVM_setMotorSpeed( MOTOR_R, sp );
+            break;
+        case MOVE_RIGHT: 
+            MVM_setMotorSpeed( MOTOR_L, sp );
+            MVM_setMotorSpeed( MOTOR_R, -sp );
+            break;
+        }
+
+    // Set motor speed telemetry pending
     TM_pendMotorSpeed();
 }
 
 
 /* 
- * Moves bot in a circle
+ * Moves bot front-right, front-left, back-right or back-left
+ * 
+ * @param sp The speed the bot will move at
+ * @param dir The direction the bot is to move to
  */
-void MVM_moveDiagonalBot(byte speedT, byte direction){
-
-    switch(direction){
-    case 0x00: 
-        MVM_setMotorSpeed( 2, (int) speedT/2 );
-        MVM_setMotorSpeed( 1, speedT );
-        break;
-    case 0x10: 
-        MVM_setMotorSpeed( 2, (int)-speedT/2 );
-        MVM_setMotorSpeed( 1, -speedT );
-        break;
-    case 0x20:
-        MVM_setMotorSpeed( 1, (int)speedT/2 );
-        MVM_setMotorSpeed( 2, speedT );
-        break;
-    case 0x30:
-        MVM_setMotorSpeed( 1, (int)-speedT/2 );
-        MVM_setMotorSpeed( 2, -speedT );
-        break;
+void MVM_spinBot(int sp, uint8_t dir){
+    // Move motors
+    switch( dir ){
+        case SPIN_U_L: 
+            MVM_setMotorSpeed( MOTOR_L, (int)sp/2 );
+            MVM_setMotorSpeed( MOTOR_R, sp );
+            break;
+        case SPIN_U_R: 
+            MVM_setMotorSpeed( MOTOR_L, sp );
+            MVM_setMotorSpeed( MOTOR_R, (int)sp/2 );
+            break;
+        case SPIN_D_L:
+            MVM_setMotorSpeed( MOTOR_L, (int)-sp/2 );
+            MVM_setMotorSpeed( MOTOR_R, -sp );
+            break;
+        case SPIN_D_R:
+            MVM_setMotorSpeed( MOTOR_L, -sp );
+            MVM_setMotorSpeed( MOTOR_R, (int)-sp/2 );
+            break;
     }
-    
+
+    // Set motor speed telemetry pending
     TM_pendMotorSpeed();
 }
 
 
-void MVM_setMotorSpeed( int motor, int speed ){
-
-    int dir = MMX_Direction_Forward;
-  
-    if( motor < 1 || motor > 2 ) return;
-
-    mSpeed[motor-1] = speed;
-  
-    if( speed < 0 ){
-        speed = -speed;
-        dir = MMX_Direction_Reverse;
-    }
+/*
+ * Main function
+ * 
+ * @data The data received from server
+ */
+void MVM_run(int data){
+    // Extract data
+    uint8_t speedID = data & SPEED_MASK;
+    uint8_t direction = data & DIRECTION_MASK;
+    uint8_t mode = data & MODE_MASK;
+    int sp;
     
-    if( speed > MAX_SPEED ) speed = MAX_SPEED;
-  
-    switch(motor){
-        case 1:
-          mmx.runUnlimited(MMX_Motor_1, dir, speed);
-          break;
-      
-        case 2:
-          mmx.runUnlimited(MMX_Motor_2, dir, speed);
-          break;
-    }   
+    // Get speed
+    switch( speedID ){
+        case SPEED_NEWSPEED:
+            sp = COMM_read_wTimeOut();
+            if( sp == -1 ) return;
+            break;
+        case SPEED_STOP:
+            sp = 0;
+            break;
+        default:
+            return;
+    }
+
+    // Apply movement
+    switch( mode ){
+        case MOVE_MODE:
+            MVM_moveBot(sp, direction);
+            break;
+        case SPIN_MODE:
+            MVM_spinBot(sp, direction);
+            break;
+        default:
+            return;
+    }
 }
 
 
-int MVM_getMotorSpeed( int motor ){ return mSpeed[motor-1]; }
-void MVM_setMotorOffset( byte mot, byte sp ){ mOffset[mot-1] = sp; }
-byte MVM_getMotorOffset( int mot ){ return mOffset[mot-1]; }
+/*
+ * Test motors connection. 
+ * Run each motor 0.5 seconds in both directions
+ */
+void MVM_testMotors(){
+    // Check if motors are all stopped
+    if( mSpeed[MOTOR_L] != 0 || mSpeed[MOTOR_R] != 0 )
+        return;
+
+    // Test motors
+    MVM_setMotorSpeed(MOTOR_L, 100);
+    delay(500);
+    MVM_setMotorSpeed(MOTOR_L, -100);
+    delay(500);
+    MVM_setMotorSpeed(MOTOR_L, 0);
+    MVM_setMotorSpeed(MOTOR_R, 100);
+    delay(500);
+    MVM_setMotorSpeed(MOTOR_R, -100);
+    delay(500);
+    MVM_setMotorSpeed(MOTOR_R, 0);
+}
+
+
+/*
+ * Getters
+ */
+int MVM_getMotorSpeed(int m){ return mSpeed[m]; }
