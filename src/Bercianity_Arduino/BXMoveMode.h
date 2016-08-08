@@ -41,6 +41,7 @@
 
 void MVM_init();
 void MVM_run(int data);
+void MVM_stopBot();
 void MVM_testMotors();
 int MVM_getMotorSpeed(int motor);
 

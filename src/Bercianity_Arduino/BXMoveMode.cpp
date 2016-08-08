@@ -144,6 +144,16 @@ void MVM_run(int data){
 
 
 /*
+ * Stop all motors
+ */
+void MVM_stopBot(){
+    // Stop all motors
+    MVM_setMotorSpeed(MOTOR_L, 0);
+    MVM_setMotorSpeed(MOTOR_R, 0);
+}
+
+
+/*
  * Test motors connection. 
  * Run each motor 0.5 seconds in both directions
  */
