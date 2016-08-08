@@ -22,6 +22,5 @@
 
 void TMO_feed();
 int TMO_checkTimeOut();
-unsigned long TMO_getCurrentTimeOut();
 
 #endif
