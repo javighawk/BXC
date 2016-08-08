@@ -30,30 +30,30 @@ void COMM_init(){
         
         /* An error occured */
         while( 1 ){
-            digitalWrite(REDLEDPIN, HIGH);
+            digitalWrite(REDLED_PIN, HIGH);
             delay(1000);
-            digitalWrite(REDLEDPIN, LOW);
+            digitalWrite(REDLED_PIN, LOW);
             delay(1000);
         }
     }
 
     /* Turn on LED indicator */
-    digitalWrite(REDLEDPIN, HIGH);
+    digitalWrite(SETUPLED_PIN, HIGH);
 
     /* Connect to WiFi network */
     if ( !cc3000.connectToAP(WLAN_SSID, WLAN_PASS, WLAN_SECURITY )) {
         
         /* Could not connect to the WiFi network */
         while( 1 ){
-            digitalWrite(SERIALPIN, HIGH);
+            digitalWrite(WIFICONNLED_PIN, HIGH);
             delay(1000);
-            digitalWrite(SERIALPIN, LOW);
+            digitalWrite(WIFICONNLED_PIN, LOW);
             delay(1000);
         }
     }
 
     /* Connection successful. Turn on LED indicator */
-    digitalWrite(SERIALPIN, HIGH);
+    digitalWrite(WIFICONNLED_PIN, HIGH);
 
     /* Request DHCP */
     while ( !cc3000.checkDHCP() ){
@@ -74,17 +74,17 @@ void COMM_init(){
             break;
         } else {
             /* Blink twice */
-            digitalWrite(GREENLEDPIN, HIGH); delay(100);
-            digitalWrite(GREENLEDPIN, LOW); delay(100);
-            digitalWrite(GREENLEDPIN, HIGH); delay(100);
-            digitalWrite(GREENLEDPIN, LOW); delay(100);
+            digitalWrite(CONNECTIONLED_PIN, HIGH); delay(100);
+            digitalWrite(CONNECTIONLED_PIN, LOW); delay(100);
+            digitalWrite(CONNECTIONLED_PIN, HIGH); delay(100);
+            digitalWrite(CONNECTIONLED_PIN, LOW); delay(100);
             COMM_closeSocket();
             Serial.println("Connection to server failed");
         }
     }  
 
     /* Turn on LED indicator */
-    digitalWrite(GREENLEDPIN, HIGH);
+    digitalWrite(CONNECTIONLED_PIN, HIGH);
 }
 
 /*
@@ -149,15 +149,15 @@ int COMM_read_wTimeOut(){
  * If buffer is empty or it's disconnected, returns -1.
  */
 int COMM_read(){
-    tConnected.TIME_trigger();
+    tConnected.trigger();
     if( clientTCP.connected() ){
-        tConnected.TIME_stop();
-        tAvailable.TIME_trigger();
+        tConnected.stop();
+        tAvailable.trigger();
         if( clientTCP.available() ){
-            tAvailable.TIME_stop();
-            tInfoRead.TIME_trigger();
+            tAvailable.stop();
+            tInfoRead.trigger();
             int cs = clientTCP.read();
-            tInfoRead.TIME_stop();
+            tInfoRead.stop();
             TMO_feed();
             return cs;
         }

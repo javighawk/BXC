@@ -21,7 +21,6 @@
 /**************** FUNCTIONS ****************/
 /*******************************************/
 
-void CMD_init();
-void CMD_shortCutCommands(uint8_t infoByte);	
+void CMD_run();	
 
 #endif

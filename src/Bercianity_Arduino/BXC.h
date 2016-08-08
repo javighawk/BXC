@@ -45,7 +45,7 @@
 /*********************************************************/
 
 #define REDLED_PIN                SETUPLED_PIN
-#define GREENLED_PIN              WIFICONN_PIN
+#define GREENLED_PIN              WIFICONNLED_PIN
 #define BLUELED_PIN               CONNECTIONLED_PIN
 
 

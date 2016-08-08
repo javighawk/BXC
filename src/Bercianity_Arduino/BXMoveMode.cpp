@@ -29,8 +29,8 @@ void MVM_setMotorSpeed(int m, int sp){
     if( m != MOTOR_L && m != MOTOR_R ) return;
 
     // Get motor direction
-    int dir = (speed >= 0) * MMX_Direction_Forward + 
-              (speed < 0) * MMX_Direction_Reverse;
+    int dir = (sp >= 0) * MMX_Direction_Forward + 
+              (sp < 0) * MMX_Direction_Reverse;
 
     // Keep speed within boundaries and store it
     mSpeed[m] = max(0, min(MAX_SPEED, abs(sp)));
@@ -49,19 +49,19 @@ void MVM_setMotorSpeed(int m, int sp){
 void MVM_moveBot(int sp, uint8_t dir){
     // Move motors
     switch( dir ){
-        case MOVE_UP:
+        case DIR_UP:
             MVM_setMotorSpeed( MOTOR_L, sp );
             MVM_setMotorSpeed( MOTOR_R, sp );
             break;
-        case MOVE_DOWN:
+        case DIR_DOWN:
             MVM_setMotorSpeed( MOTOR_L, -sp );
             MVM_setMotorSpeed( MOTOR_R, -sp );
             break;
-        case MOVE_LEFT:
+        case DIR_LEFT:
             MVM_setMotorSpeed( MOTOR_L, -sp );
             MVM_setMotorSpeed( MOTOR_R, sp );
             break;
-        case MOVE_RIGHT: 
+        case DIR_RIGHT: 
             MVM_setMotorSpeed( MOTOR_L, sp );
             MVM_setMotorSpeed( MOTOR_R, -sp );
             break;

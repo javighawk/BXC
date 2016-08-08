@@ -26,7 +26,7 @@ int TMO_checkTimeOut(){
     COMM_closeSocket();
 
     // Stop bot
-    MMD_stopBot();
+    MVM_stopBot();
 
     // Reset all LED indicators
     digitalWrite(SETUPLED_PIN, LOW);

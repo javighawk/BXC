@@ -20,7 +20,7 @@ TimeRecord tConnected("CNNCT");
 TimeRecord tTelemetry("TM");
 
 /* Array with pointers to all TimeRecord objects we have */
-TimeRecord *allTimeRecord[3] = {&tLoop, &tInfoRead, &tAvailable, &tConnected, &tTelemetry};
+TimeRecord *allTimeRecord[5] = {&tLoop, &tInfoRead, &tAvailable, &tConnected, &tTelemetry};
 
 /* Number of TimeRecord objects we have */
 int nAllTimeRecord = sizeof(allTimeRecord)/sizeof(allTimeRecord[0]);
@@ -34,16 +34,15 @@ void setup(){
     Serial.begin(SERIAL_BPS);
 
     // Setup LEDs
-    pinMode(GREENLEDPIN,OUTPUT);
-    pinMode(REDLEDPIN,OUTPUT);
-    pinMode(SERIALPIN,OUTPUT);
-    digitalWrite(GREENLEDPIN, LOW);
-    digitalWrite(REDLEDPIN, LOW);
-    digitalWrite(SERIALPIN, LOW);
+    pinMode(GREENLED_PIN,OUTPUT);
+    pinMode(REDLED_PIN,OUTPUT);
+    pinMode(BLUELED_PIN,OUTPUT);
+    digitalWrite(GREENLED_PIN, LOW);
+    digitalWrite(REDLED_PIN, LOW);
+    digitalWrite(BLUELED_PIN, LOW);
     
     // Setup modules
     MVM_init();
-    CMD_init();
     COMM_init();
 
     // Update timeout
@@ -57,7 +56,7 @@ void setup(){
 void loop(){
 
     // Start loop time recording
-    tLoop.TIME_trigger();
+    tLoop.trigger();
 
     // Check Telemetry send
     TM_checkTelemetry();
@@ -86,15 +85,13 @@ void loop(){
                 // Command mode
                 case COMMAND_MODE:
                     CMD_run();
-                    break
+                    break;
             }
         }
     }
-      
-    }
 
     // Stop loop time recording
-    tLoop.TIME_stop();
+    tLoop.stop();
 }
 
 
