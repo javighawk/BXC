@@ -1,4 +1,10 @@
 #include "BXMoveMode.h"
+#include "BXCOMM.h"
+#include "TimeOut.h"
+#include "Telemetry.h"
+#include <Wire.h>
+#include <NXTI2CDevice.h>
+#include <NXTMMX.h>
 
 /* NTXMMX object */
 NXTMMX mmx;

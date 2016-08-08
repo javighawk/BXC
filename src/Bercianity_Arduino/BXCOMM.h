@@ -7,10 +7,7 @@
 /*****************************************/
 
 #include "BXC.h"
-#include "TimeOut.h"
-#include <Adafruit_CC3000.h>
-#include <ccspi.h>
-#include <SPI.h>
+
 
 /*****************************************/
 /**************** DEFINES ****************/

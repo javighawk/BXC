@@ -6,10 +6,6 @@
 /*****************************************/
 
 #include "BXC.h"
-#include "BXCOMM.h"
-#include "BXMoveMode.h"
-#include "TimeRecord.h"
-#include "TimeOut.h"
 
 
 /*****************************************/

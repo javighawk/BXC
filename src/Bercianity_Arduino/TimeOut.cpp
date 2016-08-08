@@ -1,4 +1,7 @@
 #include "TimeOut.h"
+#include "BXCOMM.h"
+#include "BXMoveMode.h"
+#include "Telemetry.h"
 
 /* Last time TimeOut was refreshed */
 unsigned long currentTime;

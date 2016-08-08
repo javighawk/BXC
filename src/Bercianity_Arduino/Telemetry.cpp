@@ -1,4 +1,8 @@
 #include "Telemetry.h"
+#include "BXCOMM.h"
+#include "BXMoveMode.h"
+#include "TimeRecord.h"
+#include "TimeOut.h"
 
 /* Extern declarations */
 int MAIN_getNAllTimeRecord();

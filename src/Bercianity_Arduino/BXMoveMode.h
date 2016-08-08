@@ -6,11 +6,6 @@
 /*****************************************/
 
 #include "BXC.h"
-#include "TimeOut.h"
-#include "Telemetry.h"
-#include <Wire.h>
-#include <NXTI2CDevice.h>
-#include <NXTMMX.h>
 
 
 /*****************************************/
