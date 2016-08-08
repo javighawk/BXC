@@ -155,7 +155,7 @@ void MVM_stopBot(){
 
 /*
  * Test motors connection. 
- * Run each motor 0.5 seconds in both directions
+ * Run each motor alternatively 300 milliseconds in both directions
  */
 void MVM_testMotors(){
     // Check if motors are all stopped
@@ -164,14 +164,14 @@ void MVM_testMotors(){
 
     // Test motors
     MVM_setMotorSpeed(MOTOR_L, 100);
-    delay(500);
+    delay(300);
     MVM_setMotorSpeed(MOTOR_L, -100);
-    delay(500);
+    delay(300);
     MVM_setMotorSpeed(MOTOR_L, 0);
     MVM_setMotorSpeed(MOTOR_R, 100);
-    delay(500);
+    delay(300);
     MVM_setMotorSpeed(MOTOR_R, -100);
-    delay(500);
+    delay(300);
     MVM_setMotorSpeed(MOTOR_R, 0);
 }
 
