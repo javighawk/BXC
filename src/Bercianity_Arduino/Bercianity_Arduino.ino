@@ -78,7 +78,7 @@ void loop(){
         }
 
         else{
-            switch(data & MODE_MASK){
+            switch( data & MODE_MASK ){
                 // Move mode
                 case MOVE_MODE:
                 case SPIN_MODE:
