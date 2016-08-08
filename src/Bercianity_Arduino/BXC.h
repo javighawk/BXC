@@ -25,27 +25,19 @@
 /****************** MODES DEFINES ********************/
 /*****************************************************/
 
+#define MODE_MASK                 0x0C
 #define MOVE_MODE                 0x00
 #define SPIN_MODE                 0x0C
 #define COMMAND_MODE              0x08
-
-#define MODE_MASK                 0x0C
-#define SPEED_MASK                0x03
-#define DIRECTION_MASK            0x30
 
 
 /*********************************************************/
 /********************* PIN DEFINES ***********************/
 /*********************************************************/
 
-#define MOTOR1_PIN                3
-#define MOTOR2_PIN                4
-#define MOTOR3_PIN                5
-#define MOTOR4_PIN                6
 #define SETUPLED_PIN              10
-#define COMMLED_PIN               11
+#define WIFICONN_PIN              11
 #define CONNECTIONLED_PIN         12
-#define IMU_INTERRUPTPIN          17
 
 
 /*********************************************************/
@@ -53,7 +45,7 @@
 /*********************************************************/
 
 #define REDLED_PIN                SETUPLED_PIN
-#define GREENLED_PIN              COMMLED_PIN
+#define GREENLED_PIN              WIFICONN_PIN
 #define BLUELED_PIN               CONNECTIONLED_PIN
 
 
