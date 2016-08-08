@@ -1,5 +1,6 @@
 #include "TimeRecord.h"
 
+
 /*
  * Constructor
  */
@@ -12,25 +13,27 @@ TimeRecord::TimeRecord(String label){
     _label = label;
 }
 
+
 /*
  * Trigger the time recording
  */
-void TimeRecord::TIME_trigger(){
+void TimeRecord::trigger(){
     _tRec_back = micros();
 }
+
 
 /*
  * Stops the time recording
  */
-void TimeRecord::TIME_stop(){
+void TimeRecord::stop(){
 
-    /* Record the time difference */
+    // Record the time difference
     _tRec = micros() - _tRec_back;
 
-    /* Record maximum value */
+    // Record maximum value
     if( _tRec > _tRec_max ) _tRec_max = _tRec;
 
-    /* Compute the average */
+    // Compute the average
     _iter = (_iter % AVG_RECORDS) + 1;
     _tRec_avg = _tRec + (_tRec_avg * (_iter != 1));
 }
