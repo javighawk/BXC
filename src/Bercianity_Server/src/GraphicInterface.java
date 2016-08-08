@@ -168,19 +168,19 @@ public class GraphicInterface extends JFrame{
         panelSpeedTM.add(lblM2Speed);
         
         barM1Speed = new JProgressBar();
+        barM1Speed.setMinimum(-100);
         barM1Speed.setToolTipText("");
         barM1Speed.setStringPainted(true);
         barM1Speed.setString("0");
-        barM1Speed.setMaximum(1000);
         barM1Speed.setForeground(new Color(255, 165, 0));
         barM1Speed.setBounds(97, 22, 116, 14);
         panelSpeedTM.add(barM1Speed);
         
         barM2Speed = new JProgressBar();
+        barM2Speed.setMinimum(-100);
         barM2Speed.setToolTipText("");
         barM2Speed.setStringPainted(true);
         barM2Speed.setString("0");
-        barM2Speed.setMaximum(1000);
         barM2Speed.setForeground(new Color(255, 165, 0));
         barM2Speed.setBounds(97, 41, 116, 14);
         panelSpeedTM.add(barM2Speed);

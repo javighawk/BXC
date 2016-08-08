@@ -34,15 +34,11 @@ void MVM_setMotorSpeed(int m, int sp){
     // Initial assert
     if( m != MOTOR_L && m != MOTOR_R ) return;
 
-    // Get motor direction
-    int dir = (sp >= 0) * MMX_Direction_Forward + 
-              (sp < 0) * MMX_Direction_Reverse;
-
-    // Keep speed within boundaries and store it
-    mSpeed[m] = max(0, min(MAX_SPEED, abs(sp)));
+    // Store speed
+    mSpeed[m] = sp;
 
     // Apply speed
-    mmx.runUnlimited(mID[m], dir, sp); 
+    mmx.runUnlimited(mID[m], MMX_Direction_Forward, sp); 
 }
 
 

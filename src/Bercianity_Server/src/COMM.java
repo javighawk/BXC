@@ -26,8 +26,8 @@ public class COMM{
 	public final static short DIR_LEFT 			= 0x20;
 	public final static short DIR_RIGHT 		= 0x30;
 	public final static short SPIN_U_L 			= 0x00;
-	public final static short SPIN_D_L 			= 0x10;
-	public final static short SPIN_U_R 			= 0x20;
+	public final static short SPIN_U_R 			= 0x10;
+	public final static short SPIN_D_L 			= 0x20;
 	public final static short SPIN_D_R 			= 0x30;
 	
 	/* Movement speed identifiers */
